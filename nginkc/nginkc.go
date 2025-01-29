@@ -1,4 +1,4 @@
-package main
+package nginkc
 
 import (
 	"bufio"
@@ -43,7 +43,7 @@ func (res Response) toBytes() []byte {
 }
 
 type App interface {
-	call(req Request) Response
+	Call(req Request) Response
 }
 
 func parseRequest(conn net.Conn) (Request, error) {
@@ -113,7 +113,7 @@ func handleConnection(conn net.Conn, app App) {
 		return
 	}
 
-	response := app.call(request)
+	response := app.Call(request)
 	conn.Write(response.toBytes())
 }
 
@@ -134,25 +134,4 @@ func Serve(app App) {
 		}
 		go handleConnection(conn, app)
 	}
-}
-
-// TODO: Add separate module for the application
-
-type TestApp struct {
-	Name string
-}
-
-func (app TestApp) call(req Request) Response {
-	return Response{
-		StatusCode: 200,
-		Headers:    map[string]string{"Content-Type": "text/plain"},
-		Body:       fmt.Sprintf("App %s called with %s", app.Name, req.String()),
-	}
-}
-
-func main() {
-	test_app := TestApp{
-		Name: "test app",
-	}
-	Serve(test_app)
 }

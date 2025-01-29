@@ -7,4 +7,4 @@ Can accept HTTP 1.1 requests, parse them, pass them on to app, and return the ap
 
 To do:
 - Add support for later HTTP versions
-- Setup as package and have app in separate package
+- Maybe setup a web framework or something else more interesting for the app
